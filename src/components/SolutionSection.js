@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 function SolutionSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,13 +26,14 @@ function SolutionSection() {
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const node = ref.current;
+    if (node) {
+      observer.observe(node);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (node) {
+        observer.unobserve(node);
       }
     };
   }, []);
@@ -41,21 +42,21 @@ function SolutionSection() {
     setCurrentImageIndex(index);
   };
 
-  const startAutoChange = () => {
+  const stopAutoChange = useCallback(() => {
+    if (autoChangeIntervalRef.current) {
+      clearInterval(autoChangeIntervalRef.current);
+      autoChangeIntervalRef.current = null;
+    }
+  }, []);
+
+  const startAutoChange = useCallback(() => {
     stopAutoChange();
     if (images.length > 0) {
       autoChangeIntervalRef.current = setInterval(() => {
         setCurrentImageIndex((prev) => (prev + 1) % images.length);
       }, 3000);
     }
-  };
-
-  const stopAutoChange = () => {
-    if (autoChangeIntervalRef.current) {
-      clearInterval(autoChangeIntervalRef.current);
-      autoChangeIntervalRef.current = null;
-    }
-  };
+  }, [images.length, stopAutoChange]);
 
   useEffect(() => {
     if (images.length > 0) {
@@ -75,7 +76,7 @@ function SolutionSection() {
         container.removeEventListener('mouseleave', startAutoChange);
       }
     };
-  }, [images.length]);
+  }, [images.length, startAutoChange, stopAutoChange]);
 
   return (
     <section className={`solution-section ${isVisible ? 'animate-on-scroll animated' : 'animate-on-scroll'}`} ref={ref}>
