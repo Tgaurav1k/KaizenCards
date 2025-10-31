@@ -5,7 +5,7 @@ function Hero() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const slides = [
-    { image: '/images/img1.png', caption: 'Learn faster.' },
+    { image: '/images/img1.png', caption: 'Learn faster, while playing' },
     { image: '/images/img2.png', caption: 'Gamified, not Boring.' },
     { image: '/images/img3.png', caption: 'Learn together. No screens needed.' }
   ];
@@ -45,7 +45,7 @@ function Hero() {
     <section className="hero">
       <div className="hero-container">
         <div className="hero-content">
-          <div className="hero-badge">⚛️ Chemistry Learning Revolution</div>
+          <div className="hero-badge">⚛️ Play and Learn Chemistry</div>
           <h1>Master the Periodic Table with <span className="highlight">Kaizen TrumpCards</span></h1>
           <div className="hero-description">
             <p>Revolutionary gamified chemistry trumpcards for students aged 12-17. Learn all 118 elements 4x faster with fun facts and proven memory techniques. Reduce study time from 60 to 15 days!</p>
