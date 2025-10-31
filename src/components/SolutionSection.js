@@ -1,0 +1,161 @@
+import React, { useState, useEffect, useRef } from 'react';
+
+function SolutionSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const autoChangeIntervalRef = useRef(null);
+  const mainContainerRef = useRef(null);
+
+  const images = [
+    { src: '/images/AMAZON_PTABLE-01.jpg', alt: 'Image 1' },
+    { src: '/images/AMAZON_PTABLE-02.jpg', alt: 'Image 2' },
+    { src: '/images/AMAZON_PTABLE-03.jpg', alt: 'Image 3' },
+    { src: '/images/AMAZON_PTABLE-04.jpg', alt: 'Image 4' },
+    { src: '/images/AMAZON_PTABLE-05.jpg', alt: 'Image 5' },
+    { src: '/images/AMAZON_PTABLE-07.jpg', alt: 'Image 6' }
+  ];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  const changeMainImage = (index) => {
+    setCurrentImageIndex(index);
+  };
+
+  const startAutoChange = () => {
+    stopAutoChange();
+    if (images.length > 0) {
+      autoChangeIntervalRef.current = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }, 3000);
+    }
+  };
+
+  const stopAutoChange = () => {
+    if (autoChangeIntervalRef.current) {
+      clearInterval(autoChangeIntervalRef.current);
+      autoChangeIntervalRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    if (images.length > 0) {
+      startAutoChange();
+    }
+
+    const container = mainContainerRef.current;
+    if (container) {
+      container.addEventListener('mouseenter', stopAutoChange);
+      container.addEventListener('mouseleave', startAutoChange);
+    }
+
+    return () => {
+      stopAutoChange();
+      if (container) {
+        container.removeEventListener('mouseenter', stopAutoChange);
+        container.removeEventListener('mouseleave', startAutoChange);
+      }
+    };
+  }, [images.length]);
+
+  return (
+    <section className={`solution-section ${isVisible ? 'animate-on-scroll animated' : 'animate-on-scroll'}`} ref={ref}>
+      <div className="container">
+        <h2>Here's the Smarter Way to Learn Chemistry 🎯</h2>
+        <div className="solution-content">
+          <div className="solution-gallery">
+            <div className="main-image-container" ref={mainContainerRef}>
+              {images.length > 0 && images[currentImageIndex] && (
+                <img 
+                  id="mainImage"
+                  src={images[currentImageIndex].src} 
+                  alt={images[currentImageIndex].alt || "Kaizen Periodic Table Cards"}
+                  style={{ opacity: 1, transition: 'opacity 0.3s ease-in-out' }}
+                />
+              )}
+              <div className="image-badge">Premium Trumpcards</div>
+              <div className="image">Gamified Learning System</div>
+            </div>
+            <div className="thumbnail-strip">
+              {images.map((image, index) => (
+                <div
+                  key={index}
+                  className={`thumbnail-item ${index === currentImageIndex ? 'active' : ''}`}
+                  onMouseEnter={() => {
+                    stopAutoChange();
+                    changeMainImage(index);
+                  }}
+                  onClick={() => {
+                    stopAutoChange();
+                    changeMainImage(index);
+                    setTimeout(startAutoChange, 5000);
+                  }}
+                >
+                  <img src={image.src} alt={image.alt} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <ul className="solution-features">
+            <li>
+              <span className="checkmark">✅</span>
+              <div>
+                <strong>Learn While Playing</strong>
+                Gamified flashcard format makes studying addictive, not boring
+              </div>
+            </li>
+            <li>
+              <span className="checkmark">✅</span>
+              <div>
+                <strong>Smart Categorization</strong>
+                Priority-based learning: Master important elements first
+              </div>
+            </li>
+            <li>
+              <span className="checkmark">✅</span>
+              <div>
+                <strong>Screen-Free Learning</strong>
+                Parent-approved, no digital distractions
+              </div>
+            </li>
+            <li>
+              <span className="checkmark">✅</span>
+              <div>
+                <strong>4x Faster Results</strong>
+                Reduces learning time from 60 to just 15 days
+              </div>
+            </li>
+            <li>
+              <span className="checkmark">✅</span>
+              <div>
+                <strong>Memory-Boosting Fun Facts</strong>
+                Interesting trivia that makes elements unforgettable
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default SolutionSection;

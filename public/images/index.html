@@ -59,6 +59,14 @@
         overflow-x: hidden;
     }
 
+    /* Global overflow and sizing fix */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+    }
+    body { position: relative; }
+
     .container {
         max-width: 1200px;
         margin: 0 auto;
@@ -109,8 +117,8 @@
     }
 
     .logo-icon {
-        width: 45px;
-        height: 45px;
+        width: 56px;
+        height: 56px;
         background: var(--gradient-primary);
         border-radius: 12px;
         display: flex;
@@ -127,7 +135,7 @@
 
     .logo-text {
         font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 700;
     }
 
@@ -243,19 +251,20 @@
         top: 0;
         left: 0;
         right: 0;
+        width: 100%;
         opacity: 0;
-        transform: scale(0.95);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: opacity 1s ease-in-out;
         pointer-events: none;
+        z-index: 1;
         visibility: hidden;
         display: none;
     }
 
     .carousel-slide.active {
         opacity: 1;
-        transform: scale(1);
         pointer-events: auto;
         position: relative;
+        z-index: 2;
         visibility: visible;
         display: block;
     }
@@ -265,8 +274,8 @@
         justify-content: space-between;
         position: absolute;
         top: 50%;
-        left: -25px;
-        right: -25px;
+        left: -40px;
+        right: -40px;
         transform: translateY(-50%);
         pointer-events: none;
     }
@@ -287,7 +296,9 @@
         color: #1d5a55;
         font-size: 1.2rem;
         font-weight: bold;
+        z-index: 5;
     }
+    .hero-carousel { overflow: visible; }
 
     .carousel-btn:hover {
         background: #80d5be;
@@ -351,11 +362,207 @@
         border-radius: 12px;
         margin: 0;
         padding: 0;
+        transition: opacity 0.8s ease-in-out,
+                    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: opacity, transform;
     }
 
+    .carousel-slide:not(.active) .hero-image img { opacity: 0; transform: scale(0.95); }
+    .carousel-slide.active .hero-image img { opacity: 1; transform: scale(1); }
+
+    /* Carousel Caption Styles */
+    .carousel-caption {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-top: 20px;
+        padding: 0 20px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInCaption 1s ease-out 0.3s forwards;
+        will-change: opacity, transform;
+    }
+
+    @keyframes fadeInCaption {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .carousel-slide:not(.active) .carousel-caption { animation: none; opacity: 0; }
+    .carousel-slide.active .carousel-caption { animation: fadeInCaption 1s ease-out 0.3s forwards; }
 
 
 
+
+    /* ===========================
+       PERFECT SMOOTH 3-SECOND CAROUSEL (Overrides)
+       =========================== */
+    .hero-carousel {
+        position: relative;
+        max-width: 500px;
+        width: 100%;
+        z-index: 1;
+        overflow: visible;
+    }
+    .carousel-container {
+        position: relative;
+        min-height: 480px;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+    /* Perfect stacking and smooth fade */
+    .carousel-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        pointer-events: none;
+        z-index: 1;
+        will-change: opacity;
+        visibility: visible; /* ensure no visibility toggle flashes */
+        display: block; /* ensure no display toggle flashes */
+    }
+    .carousel-slide.active {
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 2;
+    }
+    .hero-image-wrapper {
+        width: 100%;
+        height: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 0;
+    }
+    .hero-image {
+        width: 100%;
+        height: 480px;
+        background: #ffffff;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        border-radius: 12px;
+        margin: 0;
+        padding: 0;
+    }
+    /* Caption animation */
+    .carousel-caption {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-top: 20px;
+        padding: 0 20px;
+        opacity: 0;
+    }
+    .carousel-slide.active .carousel-caption {
+        animation: fadeInCaption 0.6s ease-out 0.4s forwards;
+    }
+    @keyframes fadeInCaption {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    /* Controls */
+    .carousel-controls {
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        top: 50%;
+        left: -40px;
+        right: -40px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        z-index: 10;
+    }
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        background: #ffffff;
+        border: 2px solid #80d5be;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        pointer-events: auto;
+        color: #1d5a55;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 15;
+    }
+    .carousel-btn:hover {
+        background: #80d5be;
+        color: #ffffff;
+        transform: scale(1.1);
+    }
+    .carousel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 20px;
+        position: relative;
+        z-index: 5;
+    }
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(128, 213, 190, 0.3);
+        border: 2px solid #80d5be;
+        cursor: pointer;
+        transition: all 0.4s ease;
+    }
+    .dot.active {
+        width: 40px;
+        border-radius: 20px;
+        background: #80d5be;
+    }
+    /* Mobile responsive overrides */
+    @media (max-width: 768px) {
+        .carousel-container { min-height: 350px; }
+        .hero-image { height: 350px; }
+        .hero-carousel { max-width: 100%; }
+        .carousel-controls { left: -10px; right: -10px; }
+        .carousel-btn { width: 35px; height: 35px; font-size: 1rem; }
+        .carousel-caption { font-size: 1.1rem; margin-top: 15px; }
+        .dot { width: 10px; height: 10px; }
+        .dot.active { width: 30px; }
+    }
+    @media (max-width: 480px) {
+        .carousel-container { min-height: 300px; }
+        .hero-image { height: 300px; }
+        .carousel-btn { width: 32px; height: 32px; font-size: 0.95rem; }
+        .carousel-caption { font-size: 1rem; margin-top: 10px; padding: 0 15px; }
+    }
     .hero-vision {
         max-width: 750px;
         margin: 0 auto 50px;
@@ -592,9 +799,10 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 30px;
-        align-items: center;
+        align-items: start;
         max-width: 1100px;
         margin: 0 auto;
+        width: 100%;
     }
 
     .solution-image {
@@ -663,6 +871,169 @@
         display: block;
         margin-bottom: 5px;
         font-size: 1.1rem;
+    }
+
+    /* ===========================
+       SOLUTION GALLERY STYLES
+       =========================== */
+    .solution-gallery {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .main-image-container {
+        flex: 1;
+        background: linear-gradient(135deg, #F0F4F8, #E8EEF3);
+        border-radius: 24px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+        border: 3px solid var(--primary-blue);
+        position: relative;
+        overflow: hidden;
+        min-height: 450px;
+        max-height: 520px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .main-image-container::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(123, 82, 171, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    #mainImage {
+        width: 60%;
+        height: 60%;
+        max-width: 60%;
+        max-height: 60%;
+        object-fit: contain !important;
+        object-position: center center;
+        position: relative;
+        z-index: 2;
+        border-radius: 12px;
+        transition: opacity 0.3s ease-in-out;
+        display: block;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .image-badge {
+        margin-top: 10px;
+        font-size: 1.1rem;
+        color: var(--primary-blue);
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .thumbnail-strip {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 70px;
+        order: -1;
+        overflow-y: auto;
+        max-height: 520px;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .thumbnail-item {
+        width: 64px;
+        height: 64px;
+        border: 3px solid transparent;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        background: #ffffff;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .thumbnail-item:hover {
+        border-color: var(--primary-blue);
+        transform: scale(1.05);
+        box-shadow: var(--shadow-md);
+    }
+
+    .thumbnail-item.active {
+        border-color: rgba(230, 57, 70, 0.8);
+        box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.3);
+    }
+
+    .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    
+
+    .thumb-number {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background: var(--gradient-primary);
+        color: #ffffff;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 3;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+        .solution-section { padding: 60px 15px; overflow-x: hidden; }
+        .solution-content { grid-template-columns: 1fr; gap: 30px; padding: 0; width: 100%; overflow-x: hidden; }
+        .solution-gallery { flex-direction: column-reverse; width: 100%; gap: 15px; align-items: center; }
+        .thumbnail-strip {
+            flex-direction: row;
+            width: 100%;
+            max-width: 100%;
+            max-height: none;
+            height: auto;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px 0;
+            -webkit-overflow-scrolling: touch;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        .thumbnail-item { flex-shrink: 0; width: 70px; height: 70px; min-width: 70px; }
+        .main-image-container { width: 100%; max-width: 100%; min-height: 320px; max-height: 380px; padding: 15px; margin: 0; }
+        #mainImage { max-width: 100%; max-height: 100%; width: 100%; height: 100%; padding: 8px; box-sizing: border-box; }
+        .image-badge { font-size: 0.95rem; margin-top: 8px; }
+    }
+
+    @media (max-width: 480px) {
+        .main-image-container { min-height: 280px; max-height: 340px; padding: 12px; }
+        #mainImage { max-width: 60%; max-height: 60%; width: 60%; height: 50%; padding: 8px; box-sizing: border-box; }
+        .image-badge { font-size: 0.85rem; margin-top: 6px; }
+        .thumbnail-item { width: 65px; height: 65px; min-width: 65px; }
     }
 
     /* Product Details Section */
@@ -763,7 +1134,7 @@
     }
 
     .detail-card ul li::before {
-        content: '→';
+        content: '\2192';
         position: absolute;
         left: 0;
         color: var(--accent-red);
@@ -1861,30 +2232,15 @@
 
 /* Extra small devices (max-width: 360px) */
 @media (max-width: 360px) {
-  .hero h1 {
-    font-size: 1.7rem;
-  }
-
-  .carousel-container {
-    min-height: 280px;
-  }
-
-  .hero-image {
-    height: 280px;
-  }
-
-  .solution-image img {
-    max-width: 240px;
-  }
-
-  .bonus-box h3 {
-    font-size: 1.3rem;
-  }
-
-  .cta-button {
-    font-size: 0.95rem;
-    padding: 12px 20px;
-  }
+  .hero h1 { font-size: 1.7rem; }
+  .carousel-container { min-height: 280px; }
+  .hero-image { height: 280px; }
+  .solution-image img { max-width: 240px; }
+  .bonus-box h3 { font-size: 1.3rem; }
+  .cta-button { font-size: 0.95rem; padding: 12px 20px; }
+  .main-image-container { min-height: 260px; max-height: 300px; padding: 10px; }
+  #mainImage { max-width: 100%; max-height: 100%; width: 100%; height: 100%; padding: 8px; box-sizing: border-box; }
+  .thumbnail-item { width: 60px; height: 60px; min-width: 60px; }
 }
     
     
@@ -1898,14 +2254,14 @@
 <header class="header">
     <div class="header-container">
         <a href="#" class="logo">
-            <div class="logo-icon"><img src="./images/Kaizen_Vertical_withBG_white_logo.png" alt="Kaizen Microlessons" style="width: 100%; height: 100%; object-fit: cover;"></div>
+            <div class="logo-icon"><img src="http://localhost/bookKaizen/wp-content/uploads/2025/10/Kaizen_Vertical_withBG_white_logo.png" alt="Kaizen Microlessons" style="width: 100%; height: 100%; object-fit: cover;"></div>
             <span class="logo-text">Kaizen Microlessons</span>
         </a>
        <a href="https://amzn.to/3J6fmTr" class="nav-cta" target="_blank" 
    style="display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(90deg, #ff6b6b, #ff4c4c); color: white; padding: 10px 22px; border-radius: 50px; font-weight: 600; text-decoration: none; font-family: 'Segoe UI', sans-serif; transition: all 0.2s ease;">
   <span>Shop From Amazon →</span>
-  <img src="./images/imageAmazonLogo.png" 
-       alt="Amazon Logo" style="height: 18px; width: auto; vertical-align: middle; border-radius: 3px; background: white; padding: 2px;">
+  <img src="http://localhost/bookKaizen/wp-content/uploads/2025/10/imageAmazonLogo.png" 
+       alt="Amazon Logo" style="height: 20px; width: auto; vertical-align: middle; border-radius: 3px; background: white; padding: 2px;">
 </a>
 
 
@@ -1917,9 +2273,9 @@
     <div class="hero-container">
         <div class="hero-content">
             <div class="hero-badge">⚛️ Chemistry Learning Revolution</div>
-            <h1>Master the Periodic Table with <span class="highlight">Kaizen Flashcards</span></h1>
+            <h1>Master the Periodic Table with <span class="highlight">Kaizen TrumpCards</span></h1>
             <div class="hero-description">
-                <p>Revolutionary gamified chemistry flashcards for students aged 12-17. Learn all 118 elements 3x faster with fun facts and proven memory techniques. Reduce study time from 45 to 15 days!</p>
+                <p>Revolutionary gamified chemistry trumpcards for students aged 12-17. Learn all 118 elements 4x faster with fun facts and proven memory techniques. Reduce study time from 60 to 15 days!</p>
             </div>
         </div>
         
@@ -1930,8 +2286,9 @@
                     <div class="carousel-slide active">
                         <div class="hero-image-wrapper">
                             <div class="hero-image">
-                                <img src="./images/img2.png" alt="60 Days vs 15 Days Learning Comparison" loading="eager">
+                                <img src="./img1.png" alt="60 Days vs 15 Days Learning Comparison" loading="eager">
                             </div>
+                            <div class="carousel-caption">Learn faster.</div>
                         </div>
                     </div>
 
@@ -1939,8 +2296,9 @@
                     <div class="carousel-slide">
                         <div class="hero-image-wrapper">
                             <div class="hero-image">
-                                <img src="./images/img1.png" alt="15 Days Success" loading="lazy">
+                                <img src="./img2.png" alt="15 Days Success" loading="lazy">
                             </div>
+                            <div class="carousel-caption">Gamified, not Boring.</div>
                         </div>
                     </div>
 
@@ -1948,8 +2306,9 @@
                     <div class="carousel-slide">
                         <div class="hero-image-wrapper">
                             <div class="hero-image">
-                                <img src="./images/img3.png" alt="Complete Learning Kit" loading="lazy">
+                                <img src="./img3.png" alt="Complete Learning Kit" loading="lazy">
                             </div>
+                            <div class="carousel-caption">Learn together. No screens needed.</div>
                         </div>
                     </div>
                 </div>
@@ -1974,8 +2333,8 @@
 <!-- Problem Section -->
 <section class="problem-section animate-on-scroll">
     <div class="container">
-        <h2>Still Struggling with 118 Elements? 😰</h2>
-        <p>Traditional memorization is broken. Students spend <strong>45+ days</strong> cramming element names, only to forget them during exams. There's a better way...</p>
+        <h2>Still Struggling with Chemistry Elements? 😰</h2>
+        <p>Traditional memorization is broken. Students spend <strong>60+ days</strong> cramming element names, only to forget them during exams. There's a better way...</p>
     </div>
 </section>
 
@@ -1984,11 +2343,34 @@
     <div class="container">
         <h2>Here's the Smarter Way to Learn Chemistry 🎯</h2>
         <div class="solution-content">
-            <div class="solution-image">
-                <div style="position: relative; z-index: 1;">
-                    <img src="./images/card.png" alt="Premium Flashcards" style="width: 100%; height: 100%; object-fit: cover;">
-                    <p style="font-size: 1.2rem; margin-top: 20px;">Premium Flashcards</p>
-                    <p style="font-size: 1rem; color: #666;">Visual Learning System</p>
+            <div class="solution-gallery">
+                <div class="main-image-container">
+                    <img id="mainImage" src="./AMAZON_PTABLE-01.jpg" alt="Kaizen Periodic Table Cards">
+                    <div class="image-badge">Premium Trumpcards</div>
+                    <div class="image">Gamified Learning System </div>
+                </div>
+                <div class="thumbnail-strip">
+                    <div class="thumbnail-item active" data-image="./AMAZON_PTABLE-01.jpg">
+                        <img src="./AMAZON_PTABLE-01.jpg" alt="Image 1">
+                    </div>
+                    <div class="thumbnail-item" data-image="./card.png">
+                        <img src="./card.png" alt="Image 2">
+                    </div>
+                    <div class="thumbnail-item" data-image="./AMAZON_PTABLE-02.jpg">
+                        <img src="./AMAZON_PTABLE-02.jpg" alt="Image 3">
+                    </div>
+                    <div class="thumbnail-item" data-image="./AMAZON_PTABLE-03.jpg">
+                        <img src="./AMAZON_PTABLE-03.jpg" alt="Image 4">
+                    </div>
+                    <div class="thumbnail-item" data-image="./AMAZON_PTABLE-04.jpg">
+                        <img src="./AMAZON_PTABLE-04.jpg" alt="Image 5">
+                    </div>
+                    <div class="thumbnail-item" data-image="./AMAZON_PTABLE-05.jpg">
+                        <img src="./AMAZON_PTABLE-05.jpg" alt="Image 6">
+                    </div>
+                    <div class="thumbnail-item" data-image="./AMAZON_PTABLE-07.jpg">
+                        <img src="./AMAZON_PTABLE-07.jpg" alt="Image 7">
+                    </div>
                 </div>
             </div>
             <ul class="solution-features">
@@ -2016,8 +2398,8 @@
                 <li>
                     <span class="checkmark">✅</span>
                     <div>
-                        <strong>3x Faster Results</strong>
-                        Reduces learning time from 45 to just 15 days
+                        <strong>4x Faster Results</strong>
+                        Reduces learning time from 60 to just 15 days
                     </div>
                 </li>
                 <li>
@@ -2045,8 +2427,6 @@
                 <ul>
                     <li>Element Symbol & Name</li>
                     <li>Atomic Number & Mass</li>
-                    <li>Electron Configuration</li>
-                    <li>Valence Electrons</li>
                 </ul>
             </div>
             
@@ -2057,7 +2437,7 @@
                     <li>Boiling & Melting Points</li>
                     <li>Density & State of Matter</li>
                     <li>Electronegativity Values</li>
-                    <li>Atomic Radius</li>
+                 
                 </ul>
             </div>
             
@@ -2067,8 +2447,7 @@
                 <ul>
                     <li>Element Family Groups</li>
                     <li>Period & Block Location</li>
-                    <li>Reactivity Information</li>
-                    <li>Common Compounds</li>
+                    
                 </ul>
             </div>
             
@@ -2088,19 +2467,20 @@
             <div class="feature-row">
                 <div class="feature-item">
                     <span class="feature-number">118</span>
-                    <span class="feature-label">Complete Elements</span>
+                    <span class="feature-label"> <b> Complete Elements </b></span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-number">4</span>
-                    <span class="feature-label">Priority Categories</span>
+                    <span class="feature-number">3</span>
+                    <span class="feature-label"> <b> Priority Categories </b></span>
+                    <span class="feature-label"> Most Important </br> Important</br> Not Important</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-number">100+</span>
-                    <span class="feature-label">Fun Facts Included</span>
+                    <span class="feature-number"> 10</span>
+                    <span class="feature-label"> <b> Facts Per Element </b></span>
                 </div>
             </div>
         </div>
-
+        
         <div class="bonus-box">
             <h3>🎁 FREE BONUSES INCLUDED!</h3>
             <div class="bonus-content">
@@ -2123,17 +2503,17 @@
     <div class="container">
         <h2>Parents & Students Love Kaizen! ❤️</h2>
         <div class="rating-display">⭐⭐⭐⭐⭐</div>
-        <p class="review-count">4.4/5 based on 235+ Verified Amazon Reviews</p>
+        <p class="review-count">4.4/5 based on 180+ Verified Amazon Reviews</p>
         
         <div class="testimonials">
             <div class="testimonial">
-                "My son went from hating chemistry to loving it! He learned all elements in 2 weeks. Absolutely worth it!"
+                "This is a great beginner-level learning tool for my kid. It has become a consistent part of her daily play and learning." - Rashmi Singh
             </div>
             <div class="testimonial">
-                "Perfect blend of fun and education. My daughter treats it like a game and learns without realizing it."
+                "I ordered this for my daughter last week. The product is innovative and well-designed. Highly recommend!" - Sachin Mulik
             </div>
             <div class="testimonial">
-                "Cut my exam preparation time in half! The categorization system is genius. Highly recommend!"
+                "Cut my exam preparation time in half! The categorization system is genius. Highly recommend!" - Gaurav
             </div>
         </div>
     </div>
@@ -2160,7 +2540,7 @@
                     Is this aligned with CBSE/ICSE curriculum?
                 </div>
                 <div class="faq-answer">
-                    Yes! The cards cover all elements and properties required by CBSE, ICSE, and state board curricula for grades 6-12. Perfect for board exam preparation.
+                    Yes! The cards cover all elements and properties required by CBSE, ICSE, and state board curricula for grades 6-12. Perfect for JEE/NEET exam preparation.
                 </div>
             </div>
             <div class="faq-item">
@@ -2168,7 +2548,7 @@
                     What age group is this suitable for?
                 </div>
                 <div class="faq-answer">
-                    Designed for students aged 12-17, but younger kids (8+) can use it with parental guidance. Many adults also find it helpful for competitive exam preparation!
+                    Designed for students aged 12-17, but younger kids (10+) can use it with parental guidance. Many adults also find it helpful for competitive exam preparation!
                 </div>
             </div>
             <div class="faq-item">
@@ -2184,7 +2564,7 @@
                     How long does delivery take?
                 </div>
                 <div class="faq-answer">
-                    Amazon Prime members get 1-2 day delivery. Standard delivery takes 3-5 business days across India.
+                    Amazon Prime members get 1-2 day delivery. Standard delivery takes 3-5 business days across India and 7 days money back garentee through amazon.
                 </div>
             </div>
             <div class="faq-item">
@@ -2241,74 +2621,164 @@
 
 <!-- JavaScript -->
 <script>
-    // Carousel Functionality
-    let currentSlideIndex = 1;
-    let autoSlideInterval;
+    // ==========================================
+    // PERFECT 3-SECOND SMOOTH CAROUSEL
+    // ==========================================
+    (function() {
+        'use strict';
 
-    function changeSlide(n) {
-        showSlide(currentSlideIndex += n);
-        resetAutoSlide();
-    }
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        let intervalId = null;
+        let isTransitioning = false;
 
-    function currentSlide(n) {
-        showSlide(currentSlideIndex = n);
-        resetAutoSlide();
-    }
-
-    function showSlide(n) {
-        const slides = document.getElementsByClassName("carousel-slide");
-        const dots = document.getElementsByClassName("dot");
-        
-        if (n > slides.length) { currentSlideIndex = 1 }
-        if (n < 1) { currentSlideIndex = slides.length }
-        
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].classList.remove("active");
-        }
-        
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("active");
-        }
-        
-        slides[currentSlideIndex - 1].classList.add("active");
-        dots[currentSlideIndex - 1].classList.add("active");
-    }
-
-    function resetAutoSlide() {
-        clearInterval(autoSlideInterval);
-        autoSlideInterval = setInterval(() => {
-            changeSlide(1);
-        }, 2000);
-    }
-
-    // Start auto-slide handled on DOMContentLoaded below
-    document.addEventListener('DOMContentLoaded', () => {
-        // Ensure first slide is rendered, then start interval
-        showSlide(currentSlideIndex);
-        resetAutoSlide();
-
-        // Pause auto-run on hover/focus to improve UX
-        const carousel = document.querySelector('.hero-carousel');
-        if (carousel) {
-            carousel.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-            carousel.addEventListener('mouseleave', resetAutoSlide);
-            carousel.addEventListener('focusin', () => clearInterval(autoSlideInterval));
-            carousel.addEventListener('focusout', resetAutoSlide);
+        function preloadImages(callback) {
+            const imageUrls = [
+                'http://localhost/bookKaizen/wp-content/uploads/2025/10/img1.png',
+                'http://localhost/bookKaizen/wp-content/uploads/2025/10/img2.png',
+                'http://localhost/bookKaizen/wp-content/uploads/2025/10/img3.png'
+            ];
+            let loadedCount = 0;
+            imageUrls.forEach(function(url) {
+                const img = new Image();
+                img.onload = img.onerror = function() {
+                    loadedCount++;
+                    if (loadedCount === imageUrls.length) {
+                        callback();
+                    }
+                };
+                img.src = url;
+            });
         }
 
-        // Pause when tab hidden; resume when visible
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                clearInterval(autoSlideInterval);
-            } else {
-                resetAutoSlide();
+        function showSlide(index) {
+            if (isTransitioning || !slides.length) return;
+            isTransitioning = true;
+            slides.forEach(function(slide) { slide.classList.remove('active'); });
+            dots.forEach(function(dot) { dot.classList.remove('active'); });
+            slides[index].classList.add('active');
+            if (dots[index]) dots[index].classList.add('active');
+            currentIndex = index;
+            setTimeout(function() { isTransitioning = false; }, 1000); // match CSS
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(prevIndex);
+        }
+
+        function startAutoRotate() {
+            stopAutoRotate();
+            intervalId = setInterval(nextSlide, 4000); // 3s visible + 1s fade
+        }
+
+        function stopAutoRotate() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
             }
-        });
+        }
 
-        // Preload slide images to avoid blank flashes
-        ['./images/img1.png','./images/img2.png','./images/img3.png'].forEach(src => {
-            const i = new Image();
-            i.src = src;
+        function init() {
+            if (!slides.length) return;
+            showSlide(0);
+            startAutoRotate();
+            const prevBtn = document.querySelector('.carousel-controls .carousel-btn:first-child');
+            const nextBtn = document.querySelector('.carousel-controls .carousel-btn:last-child');
+            if (prevBtn) {
+                prevBtn.onclick = function() { prevSlide(); startAutoRotate(); };
+            }
+            if (nextBtn) {
+                nextBtn.onclick = function() { nextSlide(); startAutoRotate(); };
+            }
+            dots.forEach(function(dot, index) {
+                dot.onclick = function() { showSlide(index); startAutoRotate(); };
+            });
+            const carousel = document.querySelector('.hero-carousel');
+            if (carousel) {
+                carousel.addEventListener('mouseenter', stopAutoRotate);
+                carousel.addEventListener('mouseleave', startAutoRotate);
+            }
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) { stopAutoRotate(); } else { startAutoRotate(); }
+            });
+            console.log('✅ Carousel initialized: 3-second smooth transitions');
+        }
+
+        // Global for inline handlers
+        window.changeSlide = function(direction) {
+            if (direction > 0) { nextSlide(); } else { prevSlide(); }
+            startAutoRotate();
+        };
+        window.currentSlide = function(n) {
+            showSlide((n - 1 + slides.length) % slides.length);
+            startAutoRotate();
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() { preloadImages(init); });
+        } else {
+            preloadImages(init);
+        }
+    })();
+
+    // Image Gallery Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const thumbnails = document.querySelectorAll('.thumbnail-item');
+        const mainImage = document.getElementById('mainImage');
+        if (!thumbnails.length || !mainImage) return;
+
+        let currentImageIndex = 0;
+        let autoChangeInterval;
+
+        function changeMainImage(index) {
+            const newImageSrc = thumbnails[index].getAttribute('data-image');
+            mainImage.style.opacity = '0.5';
+            setTimeout(() => {
+                mainImage.src = newImageSrc;
+                mainImage.style.opacity = '1';
+            }, 300);
+            thumbnails.forEach(t => t.classList.remove('active'));
+            thumbnails[index].classList.add('active');
+            currentImageIndex = index;
+        }
+
+        function startAutoChange() {
+            autoChangeInterval = setInterval(() => {
+                currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
+                changeMainImage(currentImageIndex);
+            }, 3000);
+        }
+
+        function stopAutoChange() {
+            clearInterval(autoChangeInterval);
+        }
+
+        // Start
+        startAutoChange();
+
+        const mainContainer = document.querySelector('.main-image-container');
+        if (mainContainer) {
+            mainContainer.addEventListener('mouseenter', stopAutoChange);
+            mainContainer.addEventListener('mouseleave', startAutoChange);
+        }
+
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener('mouseenter', () => {
+                stopAutoChange();
+                changeMainImage(index);
+            });
+            thumbnail.addEventListener('click', () => {
+                stopAutoChange();
+                changeMainImage(index);
+                setTimeout(startAutoChange, 5000);
+            });
         });
     });
 
@@ -2357,10 +2827,7 @@
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
