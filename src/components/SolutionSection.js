@@ -8,6 +8,8 @@ function SolutionSection() {
   const mainContainerRef = useRef(null);
 
   const images = [
+    { src: '/images/Box Front Isometric.jpg', alt: 'Box Front Isometric' },
+    { src: '/images/Periodic Table (Amazon Image 3).jpg', alt: 'Periodic Table' },
     { src: '/images/AMAZON_PTABLE-01.jpg', alt: 'Image 1' },
     { src: '/images/AMAZON_PTABLE-02.jpg', alt: 'Image 2' },
     { src: '/images/AMAZON_PTABLE-03.jpg', alt: 'Image 3' },
@@ -84,7 +86,7 @@ function SolutionSection() {
         <h2>Here's the Smarter Way to Learn Chemistry 🎯</h2>
         <div className="solution-content">
           <div className="solution-gallery">
-            <div className="main-image-container" ref={mainContainerRef}>
+            <div className={`main-image-container ${currentImageIndex >= 1 ? 'larger-image' : ''}`} ref={mainContainerRef}>
               {images.length > 0 && images[currentImageIndex] && (
                 <img 
                   id="mainImage"

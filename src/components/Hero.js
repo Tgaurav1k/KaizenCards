@@ -7,7 +7,8 @@ function Hero() {
   const slides = [
     { image: '/images/img1.png', caption: 'Learn faster, while playing' },
     { image: '/images/img2.png', caption: 'Gamified, not Boring.' },
-    { image: '/images/img3.png', caption: 'Learn together. No screens needed.' }
+    { image: '/images/img3.png', caption: 'Learn together. No screens needed.' },
+    { image: '/images/Box Front Isometric.jpg', caption: 'Periodic Table Trump Cards' }
   ];
 
   useEffect(() => {
