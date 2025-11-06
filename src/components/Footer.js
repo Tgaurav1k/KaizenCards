@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,7 +15,25 @@ function Footer() {
           <div className="footer-column">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="https://amzn.to/3J6fmTr" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => window.open('https://amzn.to/3J6fmTr', '_blank', 'noopener,noreferrer')}
+                  aria-label="Buy on Amazon"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'inherit',
+                    padding: 0,
+                    margin: 0,
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    font: 'inherit'
+                  }}
+                >
+                  Buy on Amazon
+                </button>
+              </li>
               <li><a href="#faq">FAQs</a></li>
               <li><a href="#reviews">Customer Reviews</a></li>
               <li><a href="#product">Product Details</a></li>
@@ -24,9 +43,9 @@ function Footer() {
             <h4>Support</h4>
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
               <li><a href="mailto:b3solns1@gmail.com" style={{color: '#fff', textDecoration: 'none'}}>Contact Us</a></li>
-              <li><a href="/shipping-info" style={{color: '#fff', textDecoration: 'none'}}>Shipping Info</a></li>
-              <li><a href="/return-policy" style={{color: '#fff', textDecoration: 'none'}}>Return Policy</a></li>
-              <li><a href="/privacy-policy" style={{color: '#fff', textDecoration: 'none'}}>Privacy Policy</a></li>
+              <li><Link to="/shipping-info" style={{color: '#fff', textDecoration: 'none'}}>Shipping Info</Link></li>
+              <li><Link to="/return-policy" style={{color: '#fff', textDecoration: 'none'}}>Return Policy</Link></li>
+              <li><Link to="/privacy-policy" style={{color: '#fff', textDecoration: 'none'}}>Privacy Policy</Link></li>
             </ul>
           </div>
         </div>

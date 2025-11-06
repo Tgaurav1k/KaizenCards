@@ -1,20 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Header() {
   return (
     <header className="header">
       <div className="header-container">
-        <a href="/" className="logo">
+        <Link to="/" className="logo">
           <div className="logo-icon">
-            <img src="/images/Kaizen_Vertical_withBG_white_logo.png" alt="Kaizen Microlessons" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            <img src={`${process.env.PUBLIC_URL}/images/Kaizen_Vertical_withBG_white_logo.png`} alt="Kaizen Microlessons" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
           </div>
           <span className="logo-text">Kaizen Microlessons</span>
-        </a>
-        <a 
-          href="https://amzn.to/3J6fmTr" 
+        </Link>
+        <button 
+          type="button"
           className="nav-cta" 
-          target="_blank" 
-          rel="noopener noreferrer"
+          onClick={() => window.open('https://amzn.to/3J6fmTr', '_blank', 'noopener,noreferrer')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -23,7 +23,9 @@ function Header() {
             color: 'white',
             padding: '10px 22px',
             borderRadius: '50px',
+            border: 'none',
             fontWeight: 600,
+            fontSize: '1.15rem',
             textDecoration: 'none',
             fontFamily: "'Segoe UI', sans-serif",
             transition: 'all 0.2s ease'
@@ -31,10 +33,10 @@ function Header() {
         >
           <span>Shop From Amazon →</span>
           <img 
-            src="/images/imageAmazonLogo.png"
+            src={`${process.env.PUBLIC_URL}/images/imageAmazonLogo.png`}
             alt="Amazon Logo" 
             style={{
-              height: '20px',
+              height: '26px',
               width: 'auto',
               verticalAlign: 'middle',
               borderRadius: '3px',
@@ -42,7 +44,7 @@ function Header() {
               padding: '2px'
             }}
           />
-        </a>
+        </button>
       </div>
     </header>
   );

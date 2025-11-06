@@ -1,14 +1,23 @@
 import React from 'react';
 
 function StickyCTA() {
+  const handleClick = () => {
+    window.open('https://amzn.to/3J6fmTr', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="sticky-cta">
-      <a href="https://www.amazon.in/gp/product/B0DNKGMNTP" target="_blank" rel="noopener noreferrer">
+      <button 
+        className="sticky-cta-button" 
+        onClick={handleClick}
+        aria-label="Shop From Amazon Now"
+        style={{ fontSize: '1.3rem' }}
+      >
         <img 
-          src="/images/imageAmazonLogo.png"
+          src={`${process.env.PUBLIC_URL}/images/imageAmazonLogo.png`}
           alt="Amazon Logo" 
           style={{
-            height: '20px',
+            height: '28px',
             width: 'auto',
             verticalAlign: 'middle',
             marginRight: '6px',
@@ -18,7 +27,7 @@ function StickyCTA() {
           }}
         />
         Shop From Amazon Now 
-      </a>
+      </button>
     </div>
   );
 }

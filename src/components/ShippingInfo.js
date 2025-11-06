@@ -21,7 +21,16 @@ function ShippingInfo() {
         <p>Shipping costs are displayed during checkout on Amazon. Prime members enjoy free shipping benefits as per their membership terms.</p>
 
         <h2>Tracking Orders</h2>
-        <p>Once your order is dispatched, you'll receive a confirmation email or SMS with a tracking link. You can track it directly via your <a href="https://amzn.to/3J6fmTr" target="_blank" rel="noopener noreferrer">Amazon Orders page</a>.</p>
+        <p>Once your order is dispatched, you'll receive a confirmation email or SMS with a tracking link. You can track it directly via your {" "}
+          <button
+            type="button"
+            className="inline-link-btn"
+            onClick={() => window.open('https://amzn.to/3J6fmTr', '_blank', 'noopener,noreferrer')}
+            aria-label="Open Amazon Orders page"
+          >
+            Amazon Orders page
+          </button>.
+        </p>
 
         <h2>Damaged or Lost Packages</h2>
         <p>In rare cases where your package is lost or arrives damaged, please reach out through Amazon's "Help" section for quick resolution or replacement.</p>

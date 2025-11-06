@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 function SolutionSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -7,16 +7,25 @@ function SolutionSection() {
   const autoChangeIntervalRef = useRef(null);
   const mainContainerRef = useRef(null);
 
-  const images = [
-    { src: '/images/Box Front Isometric.jpg', alt: 'Box Front Isometric' },
-    { src: '/images/Periodic Table (Amazon Image 3).jpg', alt: 'Periodic Table' },
-    { src: '/images/AMAZON_PTABLE-01.jpg', alt: 'Image 1' },
-    { src: '/images/AMAZON_PTABLE-02.jpg', alt: 'Image 2' },
-    { src: '/images/AMAZON_PTABLE-03.jpg', alt: 'Image 3' },
-    { src: '/images/AMAZON_PTABLE-04.jpg', alt: 'Image 4' },
-    { src: '/images/AMAZON_PTABLE-05.jpg', alt: 'Image 5' },
-    { src: '/images/AMAZON_PTABLE-07.jpg', alt: 'Image 6' }
-  ];
+  const images = useMemo(() => ([
+    { src: `${process.env.PUBLIC_URL}/images/BoxwithWhiteBG.jpg`, alt: 'Box with White BG' },
+    { src: `${process.env.PUBLIC_URL}/images/Periodic Table (Amazon Image 3).jpg`, alt: 'Periodic Table' },
+    { src: `${process.env.PUBLIC_URL}/images/AMAZON_PTABLE-01.jpg`, alt: 'Image 1' },
+    { src: `${process.env.PUBLIC_URL}/images/AMAZON_PTABLE-02.jpg`, alt: 'Image 2' },
+    { src: `${process.env.PUBLIC_URL}/images/AMAZON_PTABLE-03.jpg`, alt: 'Image 3' },
+    { src: `${process.env.PUBLIC_URL}/images/AMAZON_PTABLE-04.jpg`, alt: 'Image 4' },
+    { src: `${process.env.PUBLIC_URL}/images/AMAZON_PTABLE-05.jpg`, alt: 'Image 5' },
+    { src: `${process.env.PUBLIC_URL}/images/AMAZON_PTABLE-07.jpg`, alt: 'Image 6' }
+  ]), []);
+
+  // Preload carousel images to avoid decode lag during auto-switch on mobile
+  useEffect(() => {
+    images.forEach((img) => {
+      const i = new Image();
+      i.src = img.src;
+      i.decoding = 'async';
+    });
+  }, [images]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -86,13 +95,17 @@ function SolutionSection() {
         <h2>Here's the Smarter Way to Learn Chemistry 🎯</h2>
         <div className="solution-content">
           <div className="solution-gallery">
-            <div className={`main-image-container ${currentImageIndex >= 1 ? 'larger-image' : ''}`} ref={mainContainerRef}>
+            <div className={`main-image-container ${currentImageIndex >= 1 ? 'larger-image' : ''} ${currentImageIndex >= 2 ? 'taller-image' : ''}`} ref={mainContainerRef}>
               {images.length > 0 && images[currentImageIndex] && (
-                <img 
+                <img
                   id="mainImage"
-                  src={images[currentImageIndex].src} 
+                  src={images[currentImageIndex].src}
                   alt={images[currentImageIndex].alt || "Kaizen Periodic Table Cards"}
-                  style={{ opacity: 1, transition: 'opacity 0.3s ease-in-out' }}
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                  className={`img-fade ${currentImageIndex === 2 ? 'img-third' : ''} ${currentImageIndex >= 2 ? 'img-3to8' : ''}`}
+                  style={{ opacity: 1, transition: 'opacity 0.45s ease-out' }}
                 />
               )}
               <div className="image-badge">Premium Trumpcards</div>

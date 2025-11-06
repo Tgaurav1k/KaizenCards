@@ -2,6 +2,7 @@
   "name": "kaizen-microlessons",
   "version": "1.0.0",
   "description": "Kaizen Microlessons - Gamified Chemistry Learning Website",
+  "homepage": "https://products.kaizenlessons.in/periodic-table-in",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",

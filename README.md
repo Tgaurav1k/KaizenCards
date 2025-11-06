@@ -71,21 +71,56 @@ Revolutionary gamified chemistry flashcards for students aged 12-17. Master all 
 
 ## 🚀 Deployment
 
-This project is configured for easy deployment to Netlify. See `NETLIFY_DEPLOYMENT.md` for detailed instructions.
+### 🧭 Step-by-Step: Deploy React Build to FTP Server
 
-### Quick Deploy to Netlify
+#### 1️⃣ Build Your React App
 
-1. Push your code to GitHub
-2. Connect your GitHub repo to Netlify
-3. Netlify will auto-detect build settings
-4. Deploy! 🎉
+Run this in your project root:
+
+```bash
+npm run build
+```
+
+This creates a `/build` folder with optimized static files.
+
+#### 2️⃣ Connect to Your FTP Server
+
+You can use any FTP client such as:
+
+- **FileZilla** (recommended)
+- **WinSCP**
+- **Cyberduck**
+- **VS Code extension** ("FTP Simple" or "SFTP")
+
+**FTP details:**
+
+- **Host:** `145.79.209.72`
+- **Username:** `u666984220.products.kaizenlessons.in`
+- **Password:** `$P$B1w/aGdVYx3Xj3bD`
+- **Port:** `21`
+
+#### 3️⃣ Upload Files
+
+1. In FileZilla, connect using the above credentials.
+2. On the remote side, open the directory where your site should be hosted (usually `public_html` or similar).
+3. On the local side, open your React project folder → `/build`.
+4. Upload all files inside `/build` to the server directory.
+
+#### 4️⃣ Test the Deployment
+
+Once upload completes, visit:
+
+**https://products.kaizenlessons.in**
+
+(or whichever domain/subdomain your FTP directory is mapped to)
+
+The site should load your React build.
 
 ## 🛠️ Tech Stack
 
 - **React** 18.2.0
 - **React Router DOM** 7.9.5
 - **CSS3** with custom animations
-- **Netlify** for hosting
 
 ## 📄 License
 

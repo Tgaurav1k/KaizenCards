@@ -1,15 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const slides = [
-    { image: '/images/img1.png', caption: 'Learn faster, while playing' },
-    { image: '/images/img2.png', caption: 'Gamified, not Boring.' },
-    { image: '/images/img3.png', caption: 'Learn together. No screens needed.' },
-    { image: '/images/Box Front Isometric.jpg', caption: 'Periodic Table Trump Cards' }
-  ];
+  const slides = useMemo(() => [
+    { image: `${process.env.PUBLIC_URL}/images/img1.png`, caption: 'Learn faster, while playing' },
+    { image: `${process.env.PUBLIC_URL}/images/img2.png`, caption: 'Gamified, not Boring.' },
+    { image: `${process.env.PUBLIC_URL}/images/img3.png`, caption: 'Learn together. No screens needed.' },
+    { image: `${process.env.PUBLIC_URL}/images/Box Front Isometric.jpg`, caption: 'Periodic Table Trump Cards' }
+  ], []);
+
+  // Preload first image for faster initial load
+  useEffect(() => {
+    const firstImage = `${process.env.PUBLIC_URL}/images/img1.png`;
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = firstImage;
+    link.fetchPriority = 'high';
+    document.head.appendChild(link);
+    
+    // Also preload as Image object for immediate display
+    const img = new Image();
+    img.src = firstImage;
+    img.decoding = 'async';
+    
+    return () => {
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
+    };
+  }, []);
+  
+  // Preload next image when current slide changes (for smooth transitions)
+  useEffect(() => {
+    const nextIndex = (currentSlide + 1) % slides.length;
+    const nextImage = slides[nextIndex].image;
+    const img = new Image();
+    img.src = nextImage;
+    img.decoding = 'async';
+  }, [currentSlide, slides]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,23 +87,30 @@ function Hero() {
         <div className="hero-image-section">
           <div className="hero-carousel">
             <div className="carousel-container">
-              {slides.map((slide, index) => (
-                <div 
-                  key={index}
-                  className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
-                >
-                  <div className="hero-image-wrapper">
-                    <div className="hero-image">
-                      <img 
-                        src={slide.image} 
-                        alt={slide.caption}
-                        loading={index === 0 ? 'eager' : 'lazy'}
-                      />
+              {slides.map((slide, index) => {
+                // Only render active slide and next slide for smoother transitions
+                const shouldRender = index === currentSlide || index === (currentSlide + 1) % slides.length;
+                
+                return shouldRender ? (
+                  <div 
+                    key={index}
+                    className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
+                  >
+                    <div className="hero-image-wrapper">
+                      <div className="hero-image">
+                        <img 
+                          src={slide.image} 
+                          alt={slide.caption}
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                          fetchPriority={index === 0 ? 'high' : 'auto'}
+                          decoding="async"
+                        />
+                      </div>
+                      <div className="carousel-caption">{slide.caption}</div>
                     </div>
-                    <div className="carousel-caption">{slide.caption}</div>
                   </div>
-                </div>
-              ))}
+                ) : null;
+              })}
             </div>
 
             <div className="carousel-controls">
